@@ -14,7 +14,7 @@ public class Match {
     private Team visitorTeam;
     private int homeGoals;
     private int visitorGoals;
-    private TeamSquad homePLayers;
+    private TeamSquad homePlayers;
     private TeamSquad visitorPlayers;
     private String id;
     private String desc;

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -12,5 +14,5 @@ import lombok.NoArgsConstructor;
 public class Player {
     private String firstName;
     private String lastName;
-    private Team team;
+    private List<String> id;
 }

@@ -1,5 +1,6 @@
 package com.janwisniewski.domain.services;
 
+import com.janwisniewski.adapters.PlayerDto;
 import com.janwisniewski.adapters.SeasonClubMatchDto;
 import com.janwisniewski.domain.apis.ParserApi;
 import com.janwisniewski.domain.elems.Match;
@@ -26,6 +27,7 @@ public class ParserService implements ParserApi {
     private final WebCrawlerService webCrawlerService;
     private final JsoupUtils jsoupUtils;
     private final TeamService teamService;
+    private final MapperService mapperService;
 
     private final String LEGIA_URL = "https://legionisci.com/relacje";
     private final String MATCH_PREFIX = "https://legionisci.com/mecz/";
@@ -34,6 +36,12 @@ public class ParserService implements ParserApi {
         String htmlContent = webCrawlerService.getHtmlContent(LEGIA_URL);
         Elements seasonSections = webCrawlerService.getHtmlElements(htmlContent, "div.terminarz");
         return parseSeasons(seasonSections, clubName);
+    }
+
+
+    @Override
+    public List<PlayerDto> getPlayers() {
+        return mapperService.parsePlayers();
     }
 
     private String getMatchId(String text) {
@@ -84,7 +92,7 @@ public class ParserService implements ParserApi {
                 .visitorGoals(getVisitorGoals(jsoupUtils.getTextFromNode(nodes1.get(1))))
                 .id(matchId)
                 .visitorTeam(Team.builder().teamName(visitor).build())
-                .homePLayers(getTeam(TeamType.HOME, matchId))
+                .homePlayers(getTeam(TeamType.HOME, matchId))
                 .visitorPlayers(getTeam(TeamType.VISITOR, matchId))
                 .build();
     }
@@ -132,12 +140,14 @@ public class ParserService implements ParserApi {
     private List<SeasonClubMatchDto> parseSeasons(Elements seasons, String clubName) {
         List<SeasonClubMatchDto> seasonClubMatchDtoList = new ArrayList<>();
         for (Element season : seasons) {
+            List<Match> matches;
             SeasonClubMatchDto seasonClubMatchDto = new SeasonClubMatchDto();
             seasonClubMatchDto.setSeason(createSeason(season));
-            if (!seasonClubMatchDto.getSeason().getName().contains("2003")) {
-                seasonClubMatchDto.setMatchList(parseSeason(season, clubName));
+            matches = parseSeason(season, clubName);
+            seasonClubMatchDto.setMatchList(matches);
+            if (!matches.isEmpty()) {
+                seasonClubMatchDtoList.add(seasonClubMatchDto);
             }
-            seasonClubMatchDtoList.add(seasonClubMatchDto);
         }
         return seasonClubMatchDtoList;
     }
