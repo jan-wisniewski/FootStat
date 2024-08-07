@@ -1,7 +1,5 @@
 package com.janwisniewski.adapters;
 
-import com.janwisniewski.domain.elems.Match;
-import com.janwisniewski.domain.elems.Season;
 import com.janwisniewski.domain.elems.Stats;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +9,10 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Builder
-@NoArgsConstructor
-public class SeasonClubMatchDto {
-    private Season season;
-    private List<Match> matchList;
+public class TeamInfoDto {
+    private List<SeasonClubMatchDto> seasons;
+    private Stats stats;
 }

@@ -1,5 +1,6 @@
 package com.janwisniewski.domain.services;
 
+import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
@@ -19,6 +20,19 @@ public class JsoupUtils {
             return element.childNodes();
         }
         return new ArrayList<>();
+    }
+
+    public String getSourceFromImage(List<Node> nodes) {
+        Node node = null;
+        if (!nodes.isEmpty()) {
+            node = nodes.get(0);
+        }
+        if (node instanceof Element) {
+            Element image = (Element) node;
+            Attributes attributes = image.attributes();
+            return attributes.get("src");
+        }
+        return "";
     }
 
     public String getTextFromNode(Node node) {

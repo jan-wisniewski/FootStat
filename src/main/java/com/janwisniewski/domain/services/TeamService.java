@@ -20,20 +20,24 @@ public class TeamService {
     private final PlayerService playerService;
 
     public TeamSquad parsePlayers(Elements team) {
-        List<Player> first = new ArrayList<>();
-        List<Player> reserves = new ArrayList<>();
-        for (int i = 0; i < team.getFirst().childNodes().size(); i++) {
-            Node node = team.getFirst().childNodes().get(i);
-            Element player = (Element) node;
-            Player player1 = playerService.createPlayer(player);
-            if (player.hasClass("s1")) {
-                first.add(player1);
+        try {
+            List<Player> first = new ArrayList<>();
+            List<Player> reserves = new ArrayList<>();
+            for (int i = 0; i < team.getFirst().childNodes().size(); i++) {
+                Node node = team.getFirst().childNodes().get(i);
+                Element player = (Element) node;
+                Player player1 = playerService.createPlayer(player);
+                if (player.hasClass("s1")) {
+                    first.add(player1);
+                }
+                if (player.hasClass("s2")) {
+                    reserves.add(player1);
+                }
             }
-            if (player.hasClass("s2")) {
-                reserves.add(player1);
-            }
+            return TeamSquad.builder().first11(first).reserves(reserves).build();
+        } catch (Exception e) {
+            return new TeamSquad();
         }
-        return TeamSquad.builder().first11(first).reserves(reserves).build();
     }
 
     public Team createTeam(String name) {

@@ -22,20 +22,20 @@ public class TeamController {
     private final ParserApi parserApi;
 
     @GetMapping("")
-    List<SeasonClubMatchDto> getInfo(@RequestParam String teamName) {
+    TeamInfoDto getInfo(@RequestParam String teamName) {
         return parserApi.getInfo(teamName);
     }
 
-    @GetMapping("/players")
-    Map<String, Integer> getSurnameMap() {
-        List<SeasonClubMatchDto> zagłębieLubin = parserApi.getInfo("Zagłębie Lubin");
-        List<TeamSquad> list = zagłębieLubin.stream().map(SeasonClubMatchDto::getMatchList).filter(Objects::nonNull).flatMap(List::stream).map(Match::getHomePlayers).toList();
-        List<TeamSquad> list2 = zagłębieLubin.stream().map(SeasonClubMatchDto::getMatchList).filter(Objects::nonNull).flatMap(List::stream).map(Match::getVisitorPlayers).toList();
-        List<TeamSquad> list1 = Stream.concat(Stream.of(list), Stream.of(list2)).flatMap(List::stream).toList();
-
-        Map<String, Integer> surnameMap = createSurnameMap(list1);
-        return surnameMap;
-    }
+//    @GetMapping("/players")
+//    Map<String, Integer> getSurnameMap() {
+//        List<SeasonClubMatchDto> zagłębieLubin = parserApi.getInfo("Zagłębie Lubin");
+//        List<TeamSquad> list = zagłębieLubin.stream().map(SeasonClubMatchDto::getMatchList).filter(Objects::nonNull).flatMap(List::stream).map(Match::getHomePlayers).toList();
+//        List<TeamSquad> list2 = zagłębieLubin.stream().map(SeasonClubMatchDto::getMatchList).filter(Objects::nonNull).flatMap(List::stream).map(Match::getVisitorPlayers).toList();
+//        List<TeamSquad> list1 = Stream.concat(Stream.of(list), Stream.of(list2)).flatMap(List::stream).toList();
+//
+//        Map<String, Integer> surnameMap = createSurnameMap(list1);
+//        return surnameMap;
+//    }
 
     public static Map<String, Integer> createSurnameMap(List<TeamSquad> teamSquads) {
         Map<String, Integer> surnameMap = new HashMap<>();

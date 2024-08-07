@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Team {
     private String teamName;
+    private String logo;
 }
